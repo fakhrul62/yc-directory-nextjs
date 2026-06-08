@@ -1,5 +1,5 @@
 import SearchForm from "../../components/SearchForm";
-import StartupCard from "@/components/StartupCard";
+import StartupCard, { type StartupCardType } from "@/components/StartupCard";
 
 export default async function Home({searchParams} : {searchParams: Promise <{ query?: string }>}) {
   const query = (await searchParams).query;
@@ -8,7 +8,7 @@ export default async function Home({searchParams} : {searchParams: Promise <{ qu
     _createdAt: new Date(),
     views: 120,
     author: {
-      id: 1,
+      _id: 1,
       name: 'John Doe'
     },
     description: 'This is a description',
