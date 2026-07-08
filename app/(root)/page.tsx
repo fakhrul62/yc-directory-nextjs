@@ -1,21 +1,13 @@
 import SearchForm from "../../components/SearchForm";
-import StartupCard, { type StartupCardType } from "@/components/StartupCard";
+import StartupCard from "@/components/StartupCard";
+import { getStartups } from "@/lib/startups";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home({searchParams} : {searchParams: Promise <{ query?: string }>}) {
   const query = (await searchParams).query;
-  const posts = [{
-    _id: 1,
-    _createdAt: new Date(),
-    views: 120,
-    author: {
-      _id: 1,
-      name: 'John Doe'
-    },
-    description: 'This is a description',
-    image: 'https://st2.depositphotos.com/3228285/6005/i/450/depositphotos_60054725-stock-photo-robot-lying-on-floor-and.jpg',
-    category: 'Robots',
-    title: 'We Robots'
-  }]
+  const posts = await getStartups(query);
+
   return (
     <>
       <section className="pink_container">
@@ -36,11 +28,11 @@ export default async function Home({searchParams} : {searchParams: Promise <{ qu
         <ul className="mt-7 card_grid">
         { posts?.length > 0 ? 
           (
-            posts.map((post: StartupCardType)=>
+            posts.map((post)=>
               <StartupCard key={post?._id} post={post}/>
           )
         ) : (
-            <p className="no-results">No startups found</p>
+            <p className="no-result">No startups found</p>
           )
         }
         </ul>

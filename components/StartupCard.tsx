@@ -4,22 +4,9 @@ import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import type { Startup } from "@/lib/startups";
 
-export type StartupCardType = {
-  _id: number;
-  _createdAt: string | Date;
-  views: number;
-  author: {
-    _id: number;
-    name: string;
-  };
-  description: string;
-  image: string;
-  category: string;
-  title: string;
-};
-
-const StartupCard = ({ post }: { post: StartupCardType }) => {
+const StartupCard = ({ post }: { post: Startup }) => {
   const {
     image,
     author,

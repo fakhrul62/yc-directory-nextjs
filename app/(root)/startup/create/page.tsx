@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { submitStartup } from "./actions";
 
 const CreateStartupPage = () => {
   return (
@@ -11,7 +12,20 @@ const CreateStartupPage = () => {
       </section>
 
       <section className="section_container">
-        <form className="startup-form">
+        <form action={submitStartup} className="startup-form">
+          <div>
+            <label htmlFor="authorName" className="startup-form_label">
+              Founder Name
+            </label>
+            <input
+              id="authorName"
+              name="authorName"
+              required
+              placeholder="Your name"
+              className="startup-form_input w-full"
+            />
+          </div>
+
           <div>
             <label htmlFor="title" className="startup-form_label">
               Title

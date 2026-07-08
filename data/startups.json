@@ -1,0 +1,16 @@
+[
+  {
+    "_id": 1,
+    "_createdAt": "2026-06-08T10:00:00.000Z",
+    "views": 120,
+    "author": {
+      "_id": 1,
+      "name": "John Doe"
+    },
+    "description": "A robotics startup building practical home helper machines.",
+    "image": "https://st2.depositphotos.com/3228285/6005/i/450/depositphotos_60054725-stock-photo-robot-lying-on-floor-and.jpg",
+    "category": "Robots",
+    "title": "We Robots",
+    "pitch": "We Robots builds approachable robotics for everyday homes. Our first product focuses on repetitive household tasks, using safe navigation and modular attachments so families can start small and expand over time."
+  }
+]
