@@ -17,7 +17,7 @@ const providers = [
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       })
     : null,
-].filter(Boolean);
+].filter((provider): provider is NonNullable<typeof provider> => provider !== null);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(getMongoClient()),
