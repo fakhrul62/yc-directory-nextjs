@@ -10,11 +10,17 @@ Set these environment variables in `.env.local`:
 MONGODB_URI="mongodb+srv://<user>:<password>@<cluster>/<database>?retryWrites=true&w=majority"
 MONGODB_DB="yc-directory"
 AUTH_SECRET="<generate-a-random-secret>"
-GITHUB_CLIENT_ID="<github-client-id>"
-GITHUB_CLIENT_SECRET="<github-client-secret>"
-GOOGLE_CLIENT_ID="<google-client-id>"
-GOOGLE_CLIENT_SECRET="<google-client-secret>"
+AUTH_GITHUB_ID="<github-client-id>"
+AUTH_GITHUB_SECRET="<github-client-secret>"
+AUTH_GOOGLE_ID="<google-client-id>"
+AUTH_GOOGLE_SECRET="<google-client-secret>"
+AUTH_URL="https://yc-directory-seven-phi.vercel.app"
 ```
+
+OAuth callback URLs:
+
+- GitHub: `https://yc-directory-seven-phi.vercel.app/api/auth/callback/github`
+- Google: `https://yc-directory-seven-phi.vercel.app/api/auth/callback/google`
 
 ## Getting Started
 

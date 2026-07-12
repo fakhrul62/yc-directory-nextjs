@@ -1,9 +1,18 @@
 import { loginWithEmail, loginWithGitHub, loginWithGoogle, signUpWithEmail } from "./actions";
+import { getOAuthCredentials } from "@/lib/oauth";
 
-const hasGitHubAuth =
-  !!process.env.GITHUB_CLIENT_ID && !!process.env.GITHUB_CLIENT_SECRET;
-const hasGoogleAuth =
-  !!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET;
+const hasGitHubAuth = !!getOAuthCredentials(
+  process.env.AUTH_GITHUB_ID,
+  process.env.AUTH_GITHUB_SECRET,
+  process.env.GITHUB_CLIENT_ID,
+  process.env.GITHUB_CLIENT_SECRET,
+);
+const hasGoogleAuth = !!getOAuthCredentials(
+  process.env.AUTH_GOOGLE_ID,
+  process.env.AUTH_GOOGLE_SECRET,
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+);
 
 const LoginPage = () => {
   return (

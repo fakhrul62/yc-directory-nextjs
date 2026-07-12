@@ -5,6 +5,21 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { getMongoClient, getMongoDb } from "@/lib/mongodb";
 import { verifyPassword } from "@/lib/password";
+import { getOAuthCredentials } from "@/lib/oauth";
+
+const githubCredentials = getOAuthCredentials(
+  process.env.AUTH_GITHUB_ID,
+  process.env.AUTH_GITHUB_SECRET,
+  process.env.GITHUB_CLIENT_ID,
+  process.env.GITHUB_CLIENT_SECRET,
+);
+
+const googleCredentials = getOAuthCredentials(
+  process.env.AUTH_GOOGLE_ID,
+  process.env.AUTH_GOOGLE_SECRET,
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+);
 
 const providers = [
   Credentials({
@@ -51,22 +66,24 @@ const providers = [
       };
     },
   }),
-  process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+  githubCredentials
     ? GitHub({
-        clientId: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        clientId: githubCredentials.clientId,
+        clientSecret: githubCredentials.clientSecret,
       })
     : null,
-  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+  googleCredentials
     ? Google({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        clientId: googleCredentials.clientId,
+        clientSecret: googleCredentials.clientSecret,
       })
     : null,
 ].filter((provider): provider is NonNullable<typeof provider> => provider !== null);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: MongoDBAdapter(getMongoClient()),
+  adapter: MongoDBAdapter(getMongoClient(), {
+    databaseName: process.env.MONGODB_DB ?? "yc-directory",
+  }),
   providers,
   session: {
     strategy: "jwt",
