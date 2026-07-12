@@ -118,6 +118,18 @@
         @apply border-[5px] py-4 border-black bg-white text-black relative shadow-100 font-work-sans font-medium hover:shadow-none transition-all duration-500 !important;
     }
 
+    .auth-panel {
+        @apply bg-white border-[5px] border-black rounded-[22px] shadow-200 p-6 space-y-5;
+    }
+
+    .auth-title {
+        @apply text-30-bold mb-2;
+    }
+
+    .auth-provider_btn {
+        @apply w-full border-[4px] border-black rounded-full px-5 py-4 font-bold text-[16px] bg-white hover:bg-primary-100 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
     /* searchform */
     .search-form {
         @apply max-w-3xl w-full min-h-[80px] bg-white border-[5px] border-black rounded-[80px] text-[24px] mt-8 px-5 flex flex-row items-center gap-5;

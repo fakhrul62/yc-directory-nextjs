@@ -1,12 +1,7 @@
-import { auth, signOut, signIn } from "@/auth";
+import { auth, signOut } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
-const hasGitHubAuth =
-  !!process.env.GITHUB_CLIENT_ID && !!process.env.GITHUB_CLIENT_SECRET;
-const hasGoogleAuth =
-  !!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET;
 
 const Navbar = async () => {
   const session = await auth();
@@ -34,28 +29,9 @@ const Navbar = async () => {
               <span>{session?.user?.name}</span>
             </>
           ) : (
-            <>
-              {hasGitHubAuth ? (
-                <form
-                  action={async () => {
-                    "use server";
-                    await signIn("github");
-                  }}
-                >
-                  <button type="submit">Login with GitHub</button>
-                </form>
-              ) : null}
-              {hasGoogleAuth ? (
-                <form
-                  action={async () => {
-                    "use server";
-                    await signIn("google");
-                  }}
-                >
-                  <button type="submit">Login with Google</button>
-                </form>
-              ) : null}
-            </>
+            <Link href="/login" className="login px-5 py-2">
+              Login / Sign Up
+            </Link>
           )}
         </div>
       </nav>
