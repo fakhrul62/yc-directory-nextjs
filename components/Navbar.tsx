@@ -3,6 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+const hasGitHubAuth =
+  !!process.env.GITHUB_CLIENT_ID && !!process.env.GITHUB_CLIENT_SECRET;
+const hasGoogleAuth =
+  !!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET;
+
 const Navbar = async () => {
   const session = await auth();
 
@@ -20,7 +25,7 @@ const Navbar = async () => {
               </Link>
               <form
                 action={async () => {
-                    "use server";
+                  "use server";
                   await signOut({redirectTo: "/"});
                 }}
               >
@@ -30,14 +35,26 @@ const Navbar = async () => {
             </>
           ) : (
             <>
-              <form
-                action={async () => {
-                  "use server";
-                  await signIn("github");
-                }}
-              >
-                <button type="submit">Login</button>
-              </form>
+              {hasGitHubAuth ? (
+                <form
+                  action={async () => {
+                    "use server";
+                    await signIn("github");
+                  }}
+                >
+                  <button type="submit">Login with GitHub</button>
+                </form>
+              ) : null}
+              {hasGoogleAuth ? (
+                <form
+                  action={async () => {
+                    "use server";
+                    await signIn("google");
+                  }}
+                >
+                  <button type="submit">Login with Google</button>
+                </form>
+              ) : null}
             </>
           )}
         </div>

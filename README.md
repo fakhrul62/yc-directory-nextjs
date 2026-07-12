@@ -1,5 +1,21 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Database
+
+This app uses MongoDB for startup storage.
+
+Set these environment variables in `.env.local`:
+
+```bash
+MONGODB_URI="mongodb+srv://<user>:<password>@<cluster>/<database>?retryWrites=true&w=majority"
+MONGODB_DB="yc-directory"
+AUTH_SECRET="<generate-a-random-secret>"
+GITHUB_CLIENT_ID="<github-client-id>"
+GITHUB_CLIENT_SECRET="<github-client-secret>"
+GOOGLE_CLIENT_ID="<google-client-id>"
+GOOGLE_CLIENT_SECRET="<google-client-secret>"
+```
+
 ## Getting Started
 
 First, run the development server:

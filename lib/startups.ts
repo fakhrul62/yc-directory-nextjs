@@ -1,5 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { getMongoDb } from "./mongodb";
 
 export type StartupAuthor = {
   _id: number;
@@ -27,23 +26,36 @@ export type StartupInput = {
   authorName: string;
 };
 
-const startupsPath = path.join(process.cwd(), "data", "startups.json");
+type CounterDocument = {
+  _id: string;
+  sequenceValue: number;
+};
 
-async function readStartupsFile() {
-  const file = await fs.readFile(startupsPath, "utf-8");
-  return JSON.parse(file) as Startup[];
+const STARTUPS_COLLECTION = "startups";
+const COUNTERS_COLLECTION = "counters";
+
+async function getNextSequence(sequenceName: string) {
+  const db = await getMongoDb();
+  const result = await db.collection<CounterDocument>(COUNTERS_COLLECTION).findOneAndUpdate(
+    { _id: sequenceName },
+    { $inc: { sequenceValue: 1 } },
+    { upsert: true, returnDocument: "after" },
+  );
+
+  return result?.sequenceValue ?? 1;
 }
 
-async function writeStartupsFile(startups: Startup[]) {
-  await fs.writeFile(startupsPath, `${JSON.stringify(startups, null, 2)}\n`);
+async function getStartupsCollection() {
+  const db = await getMongoDb();
+  return db.collection<Startup>(STARTUPS_COLLECTION);
 }
 
 export async function getStartups(query?: string) {
-  const startups = await readStartupsFile();
-  const sortedStartups = startups.sort(
-    (a, b) =>
-      new Date(b._createdAt).getTime() - new Date(a._createdAt).getTime(),
-  );
+  const startups = await getStartupsCollection();
+  const sortedStartups = await startups
+    .find({})
+    .sort({ _createdAt: -1 })
+    .toArray();
 
   if (!query) {
     return sortedStartups;
@@ -51,53 +63,54 @@ export async function getStartups(query?: string) {
 
   const normalizedQuery = query.toLowerCase();
 
-  return sortedStartups.filter((startup) => {
-    return [
+  return sortedStartups.filter((startup) =>
+    [
       startup.title,
       startup.description,
       startup.category,
       startup.author.name,
       startup.pitch,
-    ].some((value) => value.toLowerCase().includes(normalizedQuery));
-  });
+    ].some((value) => value.toLowerCase().includes(normalizedQuery)),
+  );
 }
 
 export async function getStartupById(id: number) {
-  const startups = await readStartupsFile();
-  return startups.find((startup) => startup._id === id) ?? null;
+  const startups = await getStartupsCollection();
+  return (await startups.findOne({ _id: id })) ?? null;
 }
 
 export async function getAuthorById(id: number) {
-  const startups = await readStartupsFile();
-  return startups.find((startup) => startup.author._id === id)?.author ?? null;
+  const startups = await getStartupsCollection();
+  const startup = await startups.findOne(
+    { "author._id": id },
+    { projection: { author: 1 } },
+  );
+
+  return startup?.author ?? null;
 }
 
 export async function getStartupsByAuthor(id: number) {
-  const startups = await getStartups();
-  return startups.filter((startup) => startup.author._id === id);
+  const startups = await getStartupsCollection();
+  return startups.find({ "author._id": id }).sort({ _createdAt: -1 }).toArray();
 }
 
 export async function createStartup(input: StartupInput) {
-  const startups = await readStartupsFile();
+  const startups = await getStartupsCollection();
+  const existingAuthorStartup = await startups.findOne(
+    { "author.name": new RegExp(`^${escapeRegExp(input.authorName)}$`, "i") },
+    { projection: { author: 1 } },
+  );
+
+  const startupId = await getNextSequence("startupId");
+  const authorId = existingAuthorStartup?.author._id ?? (await getNextSequence("authorId"));
   const now = new Date();
-  const existingAuthor = startups.find(
-    (startup) =>
-      startup.author.name.toLowerCase() === input.authorName.toLowerCase(),
-  )?.author;
-  const nextStartupId =
-    startups.reduce((maxId, startup) => Math.max(maxId, startup._id), 0) + 1;
-  const nextAuthorId =
-    startups.reduce(
-      (maxId, startup) => Math.max(maxId, startup.author._id),
-      0,
-    ) + 1;
 
   const startup: Startup = {
-    _id: nextStartupId,
+    _id: startupId,
     _createdAt: now.toISOString(),
     views: 0,
-    author: existingAuthor ?? {
-      _id: nextAuthorId,
+    author: existingAuthorStartup?.author ?? {
+      _id: authorId,
       name: input.authorName,
     },
     description: input.description,
@@ -107,7 +120,11 @@ export async function createStartup(input: StartupInput) {
     pitch: input.pitch,
   };
 
-  await writeStartupsFile([startup, ...startups]);
+  await startups.insertOne(startup);
 
   return startup;
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
