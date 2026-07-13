@@ -34,7 +34,7 @@ const StartupDetailsPage = async ({
           alt={startup.title}
           width={1200}
           height={700}
-          className="w-full max-h-[520px] rounded-[20px] border-[5px] border-black object-cover"
+          className="w-full max-h-[520px] rounded-[22px] border-[5px] border-black object-cover"
         />
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-5">
@@ -45,7 +45,7 @@ const StartupDetailsPage = async ({
             <p className="text-black-100">{formatDate(startup._createdAt)}</p>
           </div>
 
-          <div className="flex items-center gap-2 rounded-full bg-primary-100 px-5 py-3">
+          <div className="flex items-center gap-2 rounded-[22px] bg-primary-100 px-5 py-3">
             <EyeIcon className="size-5 text-primary" />
             <span className="font-semibold">{startup.views}</span>
           </div>

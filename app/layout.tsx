@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import PageLoader from "@/components/PageLoader";
 
 const workSans = localFont({
   src: [
@@ -69,6 +70,7 @@ export default function RootLayout({
         className={workSans.variable}
       >
         {children}
+        <PageLoader />
       </body>
     </html>
   );

@@ -39,7 +39,7 @@ const LoginPage = () => {
               className="startup-form_input w-full"
             />
 
-            <label htmlFor="signup-email" className="startup-form_label">
+            <label htmlFor="signup-email" className="startup-form_label !mt-8">
               Email
             </label>
             <input
@@ -51,7 +51,7 @@ const LoginPage = () => {
               className="startup-form_input w-full"
             />
 
-            <label htmlFor="signup-password" className="startup-form_label">
+            <label htmlFor="signup-password" className="startup-form_label !mt-4">
               Password
             </label>
             <input
@@ -84,7 +84,7 @@ const LoginPage = () => {
                 className="startup-form_input w-full"
               />
 
-              <label htmlFor="login-password" className="startup-form_label">
+              <label htmlFor="login-password" className="startup-form_label !mt-4">
                 Password
               </label>
               <input

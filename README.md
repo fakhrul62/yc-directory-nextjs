@@ -14,13 +14,14 @@ AUTH_GITHUB_ID="<github-client-id>"
 AUTH_GITHUB_SECRET="<github-client-secret>"
 AUTH_GOOGLE_ID="<google-client-id>"
 AUTH_GOOGLE_SECRET="<google-client-secret>"
-AUTH_URL="https://yc-directory-seven-phi.vercel.app"
+AUTH_URL="http://localhost:3000"
 ```
 
 OAuth callback URLs:
 
-- GitHub: `https://yc-directory-seven-phi.vercel.app/api/auth/callback/github`
-- Google: `https://yc-directory-seven-phi.vercel.app/api/auth/callback/google`
+- GitHub: `http://localhost:3000/api/auth/callback/github`
+- Google: `http://localhost:3000/api/auth/callback/google`
+
 
 ## Getting Started
 
